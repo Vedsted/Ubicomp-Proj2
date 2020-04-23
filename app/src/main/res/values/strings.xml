@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Ubi2 DataCollection</string>
+    <string-array name="locations">
+        <item>Bedroom 1</item>
+        <item>Bedroom 2</item>
+        <item>Kitchen 1</item>
+        <item>Kitchen 2</item>
+        <item>Living Room 1</item>
+        <item>Living Room 2</item>
+        <item>Living Room 3</item>
+        <item>Living Room 4</item>
+        <item>Balcony 1</item>
+        <item>Balcony 2</item>
+        <item>Bathroom 1</item>
+        <item>Bathroom 2</item>
+        <item>Front Door</item>
+    </string-array>
+</resources>
