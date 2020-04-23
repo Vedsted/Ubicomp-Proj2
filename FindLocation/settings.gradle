@@ -1,0 +1,2 @@
+rootProject.name='Ubi2 FindLocation'
+include ':app'
