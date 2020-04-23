@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentDirection;
 
     // AP's to look for
-    private List<String> accessPoints = Arrays.asList(new String[]{"VedstedJorgensen_5GHz", "OnePlus2", "OnePlus 5"});
+    private List<String> accessPoints = Arrays.asList("VedstedJorgensen_5GHz", "OnePlus2", "OnePlus 5");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
