@@ -78,12 +78,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (sampleCounter == 4) {
+        if (sampleCounter == 3) {
             int a1 = getAvg(samples[0]);
             int a2 = getAvg(samples[1]);
             int a3 = getAvg(samples[2]);
             Knn knn = new Knn(Integer.parseInt(this.kVal.getText().toString()));
-            txtResult.setText(knn.getLocation(a1, a2, a3));
+            String toPrint = getSamples(samples)+knn.getLocation(a1, a2, a3);
+            txtResult.setText(toPrint);
             samples = new int[3][4];
             sampleCounter = 0;
         } else {
@@ -94,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
             startScan();
         }
 
+    }
+
+    private String getSamples(int[][] samples){
+        return  "Scan 0: "+samples[0][0]+","+samples[1][0]+","+samples[2][0]+"]\n"+
+                "Scan 1: "+samples[0][1]+","+samples[1][1]+","+samples[2][1]+"]\n"+
+                "Scan 2: "+samples[0][2]+","+samples[1][2]+","+samples[2][2]+"]\n"+
+                "Scan 3: "+samples[0][3]+","+samples[1][3]+","+samples[2][3]+"]\n";
     }
 
     private int getAvg(int[] arr){
