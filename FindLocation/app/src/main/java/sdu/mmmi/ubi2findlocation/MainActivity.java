@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        samples[0][sampleCounter] = ap1;
+        samples[1][sampleCounter] = ap2;
+        samples[2][sampleCounter] = ap3;
+
         if (sampleCounter == 3) {
             int a1 = getAvg(samples[0]);
             int a2 = getAvg(samples[1]);
@@ -88,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
             samples = new int[3][4];
             sampleCounter = 0;
         } else {
-            samples[0][sampleCounter] = ap1;
-            samples[1][sampleCounter] = ap2;
-            samples[2][sampleCounter] = ap3;
             sampleCounter++;
             startScan();
         }
