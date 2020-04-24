@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtResult;
     private EditText kVal;
 
+    private int[][] samples = new int[3][4];
+    private int sampleCounter = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scanFailure() {
-        txtResult.setText("Scan failed");
+        sampleCounter = 0;
+        samples = new int[3][4];
+        txtResult.setText("Scan failed - Resetting");
     }
 
     private void scanSuccess() {
+        txtResult.setText("Scan " + sampleCounter);
+
         List<ScanResult> results = wifiManager.getScanResults();
         int ap1 = Integer.MIN_VALUE;
         int ap2 = Integer.MIN_VALUE;
@@ -71,11 +78,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Knn knn = new Knn(Integer.parseInt(this.kVal.getText().toString()));
-        txtResult.setText(knn.getLocation(ap1, ap2, ap3));
+        if (sampleCounter == 4) {
+            int a1 = getAvg(samples[0]);
+            int a2 = getAvg(samples[1]);
+            int a3 = getAvg(samples[2]);
+            Knn knn = new Knn(Integer.parseInt(this.kVal.getText().toString()));
+            txtResult.setText(knn.getLocation(a1, a2, a3));
+            samples = new int[3][4];
+            sampleCounter = 0;
+        } else {
+            samples[0][sampleCounter] = ap1;
+            samples[1][sampleCounter] = ap2;
+            samples[2][sampleCounter] = ap3;
+            sampleCounter++;
+            startScan();
+        }
+
+    }
+
+    private int getAvg(int[] arr){
+        int res = 0;
+        for(int i : arr){
+            res+=i;
+        }
+        return res/arr.length;
     }
 
     public void startScan(View view) {
+        startScan();
+    }
+
+    private void startScan() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         this.registerReceiver(wifiScanReceiver, intentFilter);
@@ -83,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         boolean success = wifiManager.startScan();
         if (!success) {
             // scan failure handling
-            txtResult.setText("Scan failed");
+            scanFailure();
         }
     }
 }
