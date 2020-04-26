@@ -28,4 +28,8 @@ public class SignalVector {
     public int getAp3() {
         return ap3;
     }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

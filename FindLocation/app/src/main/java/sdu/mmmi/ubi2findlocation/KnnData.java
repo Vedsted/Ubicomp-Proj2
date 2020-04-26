@@ -1,11 +1,63 @@
 package sdu.mmmi.ubi2findlocation;
 
+import android.content.Context;
+import android.os.Environment;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KnnData {
 
-    public static List<SignalVector> getData() {
+    private final static String pathToCsv = "";
+
+
+    public static List<SignalVector> getData(Context context) throws IOException {
+        List<SignalVector> data = new ArrayList<>();
+
+        InputStream is = context.getResources().openRawResource(R.raw.data);
+        BufferedReader csvReader = new BufferedReader(new InputStreamReader(is));
+
+        String line;
+        while ((line = csvReader.readLine()) != null) {
+            String[] row = line.split(",");
+            // 1587720906833,Bedroom 1,U,-45,-44,-59
+            data.add(new SignalVector(row[1], Integer.parseInt(row[3]), Integer.parseInt(row[4]), Integer.parseInt(row[5])));
+            System.out.println(row[1] +","+Integer.parseInt(row[3])+","+ Integer.parseInt(row[4])+","+ Integer.parseInt(row[5]));
+            // do something with the data
+        }
+        csvReader.close();
+
+        return data;
+    }
+
+    public static List<SignalVector> getDataRooms(Context context) throws IOException {
+        List<SignalVector> data = getData(context);
+
+        List<SignalVector> RoomData = data.stream().map(r -> {
+            String[] s = r.getLocation().split(" ");
+            String newLoc = "";
+            for (int i = 0; i < s.length - 1; i++) {
+                newLoc += s[i];
+            }
+            r.setLocation(newLoc);
+            System.out.println(newLoc);
+            return r;
+        }).collect(Collectors.toList());
+
+        return RoomData;
+    }
+
+
+
+
+    public static List<SignalVector> getTestData() {
         List<SignalVector> data = new ArrayList<>();
         data.add(new SignalVector("Bedroom 1",-52,-27,-72));
         data.add(new SignalVector("Bedroom 1",-47,-29,-70));

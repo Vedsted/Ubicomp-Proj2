@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private int[][] samples = new int[3][4];
     private int sampleCounter = 0;
 
+    private List<SignalVector> dataLocations;
+    private List<SignalVector> dataRooms;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
          kVal = findViewById(R.id.in_k);
          txtResult = findViewById(R.id.txtResult);
+
+        try {
+            dataLocations = KnnData.getData(this);
+            dataRooms = KnnData.getDataRooms(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
         wifiScanReceiver = new BroadcastReceiver() {
@@ -86,8 +97,11 @@ public class MainActivity extends AppCompatActivity {
             int a1 = getAvg(samples[0]);
             int a2 = getAvg(samples[1]);
             int a3 = getAvg(samples[2]);
-            Knn knn = new Knn(Integer.parseInt(this.kVal.getText().toString()));
-            String toPrint = getSamples(samples)+knn.getLocation(a1, a2, a3);
+
+            Knn knnLocations = new Knn(Integer.parseInt(this.kVal.getText().toString()), dataLocations);
+            Knn knnRooms = new Knn(Integer.parseInt(this.kVal.getText().toString()), dataRooms);
+            String toPrint = "Locations:\n" + getSamples(samples)+knnLocations.getLocation(a1, a2, a3) + "\n\n";
+            toPrint += "Rooms:\n" + getSamples(samples)+knnRooms.getLocation(a1, a2, a3) + "\n";
             txtResult.setText(toPrint);
             samples = new int[3][4];
             sampleCounter = 0;

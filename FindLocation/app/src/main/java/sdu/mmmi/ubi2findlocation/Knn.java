@@ -1,5 +1,7 @@
 package sdu.mmmi.ubi2findlocation;
 
+import android.content.Context;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +13,9 @@ public class Knn {
     private int k;
     private List<SignalVector> data;
 
-    public Knn(int k) {
+    public Knn(int k, List<SignalVector> data) {
         this.k = k;
-        this.data = KnnData.getData();
+        this.data = data;
     }
 
     public String getLocation(int ap1, int ap2, int ap3) {
